@@ -87,3 +87,17 @@ def test_field_shape_and_target_agree():
     for f in (smooth(), blob(), mirrored_seam(), blind_split(), blind_uniform()):
         assert f.h == len(f.target) and f.w == len(f.target[0])
         assert f.mae() >= 0
+
+
+def test_result_table_renders_every_row():
+    """Regression pin (fixes #1): the row body was once dedented out of the
+    for-loop, silently rendering only the LAST row -- plausible-looking output
+    that under-reports every other selector."""
+    r = harness.Result(budgets=[6, 12, 24],
+                       rows=[{"selector": "oracle", "mae": 0.10},
+                             {"selector": "judge", "mae": 0.15},
+                             {"selector": "noise", "mae": 0.16}],
+                       controls_passed=5, controls_total=5)
+    t = r.table()
+    assert len(t) == 4, f"header + one line per row; got {len(t)} lines: {t}"
+    assert "oracle" in t[1] and "judge" in t[2] and "noise" in t[3], t

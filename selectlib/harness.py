@@ -24,13 +24,13 @@ class Result:
         out.append("  " + "".join(f"{c:>{width}s}" for c in cols))
         for r in self.rows:
             cells = []
-        for c in cols:
-            v = r[c]
-            cells.append(f"{v:>{width}s}" if isinstance(v, str)
-                         else f"{(round(v, 4) if isinstance(v, float) else v):>{width}d}"
-                         if isinstance(v, int)
-                         else f"{v:>{width}.4f}")
-        out.append("  " + "".join(cells))
+            for c in cols:
+                v = r[c]
+                cells.append(f"{v:>{width}s}" if isinstance(v, str)
+                             else f"{(round(v, 4) if isinstance(v, float) else v):>{width}d}"
+                             if isinstance(v, int)
+                             else f"{v:>{width}.4f}")
+            out.append("  " + "".join(cells))
         return out
 
     def verdict(self):
